@@ -24,8 +24,8 @@ def load_data():
 def train_models(data):
     features = data.drop(columns=[TARGET])
     target = data[TARGET].astype(int)
-    categorical_columns = features.select_dtypes(include=["object"]).columns.tolist()
-    numeric_columns = features.select_dtypes(exclude=["object"]).columns.tolist()
+    categorical_columns = features.select_dtypes(include=["object", "str"]).columns.tolist()
+    numeric_columns = features.select_dtypes(exclude=["object", "str"]).columns.tolist()
 
     preprocessor = ColumnTransformer(
         transformers=[
@@ -72,7 +72,7 @@ st.subheader("Model accuracy")
 score_table = pd.DataFrame(
     {"Model": list(scores.keys()), "Accuracy": [f"{score:.2%}" for score in scores.values()]}
 ).sort_values("Accuracy", ascending=False)
-st.dataframe(score_table, hide_index=True, use_container_width=True)
+st.dataframe(score_table, hide_index=True, width="stretch")
 st.caption("Scores use a stratified 80/20 holdout split with random state 42.")
 
 st.subheader("Predict a loan application")
